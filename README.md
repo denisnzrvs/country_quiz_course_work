@@ -8,4 +8,4 @@
 `./configure && make` in `/libs/portaudio/`
 
 ### Compiling
-Current command: `g++ -Wall -Wextra -g3 /Users/denisnzrvs/country_quiz_course_work/sound.cpp -o /Users/denisnzrvs/country_quiz_course_work/output/sound -lportaudio`
+Current command: `g++ -Wall -Wextra -g3 ./sound.cpp -o ./output/sound -lportaudio`
