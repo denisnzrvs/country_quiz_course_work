@@ -30,6 +30,22 @@ int main()
         cout << "Thanks for playing!" << endl;
     }
 
+    if (choice == 'S' || choice == 's')
+    {
+        clearScreen();
+        cout << "#### Country Quiz Scoreboard ####" << endl;
+        cout << "1. " << endl;
+        cout << "2. " << endl;
+        cout << "Q. Quit" << endl;
+        cin >> choice;
+        if (choice == 'Q' || choice == 'q')
+        {
+            clearScreen();
+            cout << "#### Country Quiz ####" << endl;
+            cout << "Thanks for playing!" << endl;
+        }
+    }
+
     if (choice == 'P' || choice == 'p')
     {
         clearScreen();
