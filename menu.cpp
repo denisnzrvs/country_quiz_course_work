@@ -14,6 +14,9 @@ int main()
 
     cout << "#### Country Quiz ####" << endl;
     char choice;
+    char level;
+    char worldPart;
+    
     cout
         << "Welcome to Country Quiz!" << endl;
     cout << endl;
@@ -50,15 +53,32 @@ int main()
     {
         clearScreen();
         cout << "#### Country Quiz ####" << endl;
-        cout << "this is where the game should be, but it is currently on vacation." << endl;
-        cout << "Q. Quit" << endl;
-        cin >> choice;
-        if (choice == 'Q' || choice == 'q')
-        {
+        cout << "Choose dificulty" << endl;
+        cout << endl;
+        cout << "B. Beginner" << endl;
+        cout << "M. Middle" << endl;
+        cout << "H. Hard" << endl;
+        cout << endl;
+        cout << "Enter your choice: ";
+        cout << endl;
+        cin >> level;
+        if (level == 'B' || level == 'b' || level == 'M' || level == 'm' || level == 'H' || level == 'h' )
+            {
             clearScreen();
             cout << "#### Country Quiz ####" << endl;
-            cout << "Thanks for playing!" << endl;
-        }
+            cout << "Choose part of the World" << endl;
+            cout << endl;
+            cout << "Eu. Europe" << endl;
+            cout << "E. East" << endl;
+            cout << "Am. America" << endl;
+            cout << "Af. Africa" << endl;
+            cout << "A. Asia" << endl;
+            cout << "All." << endl;
+            cout << endl;
+            cout << "Enter your choice: ";
+            cout << endl;
+            cin >> worldPart;
+            }
     }
     return 0;
 }
