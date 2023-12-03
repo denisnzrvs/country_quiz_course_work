@@ -8,4 +8,5 @@
 `./configure && make` in `/libs/portaudio/`
 
 ### Compiling
-Current command: `g++ -Wall -Wextra -g3 ./sound.cpp -o ./output/sound -lportaudio`
+To test sound: `g++ -Wall -Wextra -g3 ./sound.cpp -o ./output/sound -lportaudio`
+To compile main.cpp and other needed files: `g++ main.cpp menu.cpp -o myprogram`
