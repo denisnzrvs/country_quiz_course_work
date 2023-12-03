@@ -12,7 +12,33 @@ void clearScreen()
 void playMenu()
 {
     clearScreen();
-    cout << "play menu selected!";
+    char level;
+    char worldPart;
+
+    cout << "Choose dificulty" << endl;
+    cout << endl;
+    cout << "B. Beginner" << endl;
+    cout << "M. Middle" << endl;
+    cout << "H. Hard" << endl;
+    cout << endl;
+    cout << "Enter your choice: ";
+    cout << endl;
+    cin >> level;
+    if (level == 'B' || level == 'b' || level == 'M' || level == 'm' || level == 'H' || level == 'h')
+    {
+        cout << "Choose part of the World" << endl;
+        cout << endl;
+        cout << "Eu. Europe" << endl;
+        cout << "E. East" << endl;
+        cout << "Am. America" << endl;
+        cout << "Af. Africa" << endl;
+        cout << "A. Asia" << endl;
+        cout << "All." << endl;
+        cout << endl;
+        cout << "Enter your choice: ";
+        cout << endl;
+        cin >> worldPart;
+    }
 }
 
 void scoreMenu()
