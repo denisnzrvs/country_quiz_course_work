@@ -4,9 +4,12 @@
 #include <string>
 #include <algorithm>
 #include <random>
+#include <chrono>
+#include <thread>
 #include "writeScore.cpp"
 int score = 0;
 #define RED_TEXT "\033[1;31m"
+#define GREEN_TEXT "\033[1;32m"
 #define RESET_COLOR "\033[0m"
 
 struct Question
@@ -18,6 +21,10 @@ struct Question
     std::string world;
     std::vector<std::string> answers;
 };
+
+void printSeparator() {
+    std::cout << "-----------------------------------" << std::endl;
+}
 
 void addAnswers(Question &question, const std::vector<Question> &allQuestions)
 {
@@ -91,6 +98,9 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
                 break;
             }
             result.push_back(q);
+            printSeparator();
+            std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+            clearScreen();
             std::cout << q.question << endl;
             cout << endl;
             addAnswers(q, questions);
@@ -107,7 +117,7 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
 
             if (checkAnswer(q, userChoice))
             {
-                std::cout << "Correct! You earned 10 points." << std::endl;
+                std::cout << GREEN_TEXT << "Correct! You earned 10 points." << RESET_COLOR << std::endl;
                 score += 10;
             }
             else
