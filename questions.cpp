@@ -46,11 +46,13 @@ bool checkAnswer(const Question& question, int userChoice) {
     return question.answer == question.answers[userChoice - 1];
 }
 
-std::vector<Question> findQuestions(const std::vector<Question>& questions, const std::string& category, const std::string& difficulty, const std::string& world) {
+std::vector<Question> findQuestions(std::vector<Question> questions, const std::string& category, const std::string& difficulty, const std::string& world) {
     std::vector<Question> result;
-    for (const auto& q : questions) {
+    for (auto& q : questions) {
         if (q.category == category && q.difficulty == difficulty && q.world == world) {
             result.push_back(q);
+            std::cout << q.question;
+            addAnswers(q, questions);
             //askQuestion(q);
 
             int userChoice;
@@ -91,6 +93,10 @@ int main() {
         questions.push_back(q);
         
     }
+
+    //findQuestions(questions, "Flag", "Easy", "Europe");
+
+
 
      for (auto& q : questions) {
         addAnswers(q, questions);
