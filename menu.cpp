@@ -41,8 +41,14 @@ void playMenu()
         cout << "Enter your choice: ";
         cout << endl;
         cin >> worldPart;
+        if (level == "Eu" || level == "eu" || level == "E" || level == "e" || level == "Am" || level == "am" || level == "Af" || level == "a" || level == "A" || level == "All" || level == "ALL")
+    {
+        clearScreen();
+        cout << "Game starts now" << endl;
+        //timer for 5 secs
         vector<Question> questions = setupVector();
         findQuestions(questions, "Flag", level, worldPart);
+    }
     }
 }
 
