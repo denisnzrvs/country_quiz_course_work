@@ -26,6 +26,7 @@ void playMenu()
     cin >> level;
     if (level == 'B' || level == 'b' || level == 'M' || level == 'm' || level == 'H' || level == 'h')
     {
+        clearScreen();
         cout << "Choose part of the World" << endl;
         cout << endl;
         cout << "Eu. Europe" << endl;
