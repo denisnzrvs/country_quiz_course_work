@@ -6,6 +6,50 @@
 
 using namespace std;
 
+void setDifficulty(string &level)
+{
+    if (level == "B" || level == "b")
+    {
+        level = "Beginner";
+    }
+    else if (level == "M" || level == "m")
+    {
+        level = "Middle";
+    }
+    else if (level == "H" || level == "h")
+    {
+        level = "Hard";
+    }
+}
+
+void setWorld(string &worldPart)
+{
+    if (worldPart == "Eu" || worldPart == "eu")
+    {
+        worldPart = "Europe";
+    }
+    else if (worldPart == "E" || worldPart == "e")
+    {
+        worldPart = "East";
+    }
+    else if (worldPart == "Am" || worldPart == "am")
+    {
+        worldPart = "America";
+    }
+    else if (worldPart == "Af" || worldPart == "af")
+    {
+        worldPart = "Africa";
+    }
+    else if (worldPart == "A" || worldPart == "a")
+    {
+        worldPart = "Asia";
+    }
+    else if (worldPart == "All" || worldPart == "ALL")
+    {
+        worldPart = "All";
+    }
+}
+
 void clearScreen()
 {
     std::cout << "\033[2J\033[1;1H"; // ANSI escape code for clearing screen
@@ -41,14 +85,16 @@ void playMenu()
         cout << "Enter your choice: ";
         cout << endl;
         cin >> worldPart;
-        if (level == "Eu" || level == "eu" || level == "E" || level == "e" || level == "Am" || level == "am" || level == "Af" || level == "a" || level == "A" || level == "All" || level == "ALL")
-    {
-        clearScreen();
-        cout << "Game starts now" << endl;
-        //timer for 5 secs
-        vector<Question> questions = setupVector();
-        findQuestions(questions, "Flag", level, worldPart);
-    }
+        if (worldPart == "Eu" || worldPart == "eu" || worldPart == "E" || worldPart == "e" || worldPart == "Am" || worldPart == "am" || worldPart == "Af" || worldPart == "a" || worldPart == "A" || worldPart == "All" || worldPart == "ALL")
+        {
+            clearScreen();
+            setDifficulty(level);
+            setWorld(worldPart);
+            cout << "Game starts now" << endl;
+            // timer for 5 secqs
+            vector<Question> questions = setupVector();
+            findQuestions(questions, "Flag", level, worldPart);
+        }
     }
 }
 
