@@ -6,6 +6,8 @@
 #include <random>
 #include "writeScore.cpp"
 int score = 0;
+#define RED_TEXT "\033[1;31m"
+#define RESET_COLOR "\033[0m"
 
 struct Question
 {
@@ -110,7 +112,7 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
             }
             else
             {
-                std::cout << "Incorrect. The correct answer is: " << q.answer << std::endl;
+                std::cout << RED_TEXT << "Incorrect. The correct answer is: " << q.answer << RESET_COLOR << std::endl;
             }
         }
     }
