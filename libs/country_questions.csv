@@ -26,7 +26,7 @@
 🇪🇹,Ethiopia,Flag,Beginner,Africa
 🇫🇮,Finland,Flag,Beginner,Europe
 🇫🇴,Faroe Islands,Flag,Beginner,Europe
-🇬🇪,Georgia,Flag,Beginner, Europe/Asia
+🇬🇪,Georgia,Flag,Beginner,Europe/Asia
 🇬🇭,Ghana,Flag,Beginner,Africa
 🇬🇲,Gambia,Flag,Beginner,Africa
 🇬🇷,Greece,Flag,Beginner,Europe
@@ -93,7 +93,7 @@ Eqypt,Cairo,Capital,Middle,Africa
 Ethiopia,Addis Ababa,Capital,Middle,Africa
 Finland,Helsinki,Capital,Middle,Europe
 Faroe Islands,Torshavn,Capital,Middle,Europe
-Georgia,Tbilisi,Capital,Middle, Europe/Asia
+Georgia,Tbilisi,Capital,Middle,Europe/Asia
 Ghana,Accra,Capital,Middle,Africa
 Gambia,Banjul,Capital,Middle,Africa
 Greece,Athens,Capital,Middle,Europe
@@ -147,14 +147,14 @@ Where is Transylvania located?,Romania,Fact,Hard,Europe
 What EU country has the largest population?,Germany,Fact,Hard,Europe
 What country uses the Złoty as currency?,Poland,Fact,Hard,Europe
 From what country did the US purchase Alaska in the early 18th century?,Russia,Fact,Hard,Europe/Asia
-"By size, what is the smallest country in the world?",Vatican,Fact,Hard,Europe
+"By size,what is the smallest country in the world?",Vatican,Fact,Hard,Europe
 Which country has a unicorn as its national animal?,Scotland,Fact,Hard,Europe
 What country was known as Ceylon until 1972?,Sri Lanka,Fact,Hard,Asia
 Which country is home to the worlds tallest building?,United Arab Emirates,Fact,Hard,East
-"Officially, what is the coldest country in the world?",Russia,Fact,Hard,Europe/Asia
+"Officially,what is the coldest country in the world?",Russia,Fact,Hard,Europe/Asia
 In which country would you find the currency baht’? ,Thailand,Fact,Hard,Asia
 What country is Phnom Penh the capital of?,Cambodia,Fact,Hard,Asia
-"Where is Nollywood, the second biggest movie industry in the world in terms of number of films made?",Nigeria,Fact,Hard,Africa
+"Where is Nollywood,the second biggest movie industry in the world in terms of number of films made?",Nigeria,Fact,Hard,Africa
 The first modern Olympic Games were held in which country?,Greece,Fact,Hard,Europe
 Which country has the most islands in the world?,Sweden,Fact,Hard,Europe
 Where is the sacred River Ganges?,India,Fact,Hard,Asia
@@ -179,7 +179,7 @@ What country has pyramids older than Egypt?,Sudan,Fact,Hard,Africa
 What country is known as the Land of the Rising Sun?,Japan,Fact,Hard,Asia
 What country has the most official languages?,Zimbabwe,Fact,Hard,Africa
 What country is known as the Land of Thunder Dragon?,Bhutan,Fact,Hard,Africa
-"In which country is the worlds highest waterfall, Angel Falls, located?",Venezuela,Fact,Hard,America
+"In which country is the worlds highest waterfall,Angel Falls, located?",Venezuela,Fact,Hard,America
 Which country is famous for its tulips?,Netherlands,Fact,Hard,Europe
 Which country is the largest producer of coffee?,Brazil,Fact,Hard,America
 Which country is the largest in Africa by land area?,Algeria,Fact,Hard,Africa
