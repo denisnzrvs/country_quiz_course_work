@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include "menu.h"
+#include "questions.cpp"
+#include <vector>
 
 using namespace std;
 
@@ -12,8 +14,8 @@ void clearScreen()
 void playMenu()
 {
     clearScreen();
-    char level;
-    char worldPart;
+    string level;
+    string worldPart;
 
     cout << "Choose dificulty" << endl;
     cout << endl;
@@ -24,7 +26,7 @@ void playMenu()
     cout << "Enter your choice: ";
     cout << endl;
     cin >> level;
-    if (level == 'B' || level == 'b' || level == 'M' || level == 'm' || level == 'H' || level == 'h')
+    if (level == "B" || level == "b" || level == "M" || level == "m" || level == "H" || level == "h")
     {
         clearScreen();
         cout << "Choose part of the World" << endl;
@@ -39,6 +41,8 @@ void playMenu()
         cout << "Enter your choice: ";
         cout << endl;
         cin >> worldPart;
+        vector<Question> questions = setupVector();
+        findQuestions(questions, "Flag", level, worldPart);
     }
 }
 

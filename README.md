@@ -9,4 +9,4 @@
 
 ### Compiling
 To test sound: `g++ -Wall -Wextra -g3 ./sound.cpp -o ./output/sound -lportaudio`
-To compile main.cpp and other needed files: `g++ main.cpp menu.cpp -o myprogram`
+To compile main.cpp and other needed files: `g++ -std=c++11 main.cpp menu.cpp -o country_quiz`
