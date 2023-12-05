@@ -4,6 +4,8 @@
 #include <string>
 #include <algorithm>
 #include <random>
+#include "writeScore.cpp"
+int score = 0;
 
 struct Question
 {
@@ -75,9 +77,8 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
 
             if (checkAnswer(q, userChoice))
             {
-                clearScreen();
                 std::cout << "Correct! You earned 10 points." << std::endl;
-                // userScore += 10; // Add a variable to keep track of the user's score
+                score += 10;
             }
             else
             {
@@ -85,6 +86,14 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
             }
         }
     }
+
+    cout << endl;
+    cout << "End of game! Your score is: " << score << endl;
+    cout << "Let's save your game. Enter your name: ";
+    string username;
+    cin >> username;
+    writeScore(username, score);
+    cout << "Thanks for playing!";
 
     return result;
 }

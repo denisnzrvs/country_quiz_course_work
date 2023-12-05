@@ -3,6 +3,7 @@
 #include "menu.h"
 #include "questions.cpp"
 #include <vector>
+#include "printScores.cpp"
 
 using namespace std;
 
@@ -133,7 +134,7 @@ void mainMenu(const std::string &message)
     }
     else if (choice == 'S' || choice == 's')
     {
-        scoreMenu();
+        printScores();
     }
     else if (choice == 'Q' || choice == 'q')
     {
