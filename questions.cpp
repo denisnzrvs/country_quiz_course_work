@@ -45,19 +45,44 @@ bool checkAnswer(const Question &question, int userChoice)
     return question.answer == question.answers[userChoice - 1];
 }
 
-std::vector<Question> findQuestions(std::vector<Question> questions, const std::string &category, const std::string &difficulty, const std::string &world)
+bool filter(const Question &question, const std::string &difficulty, const std::string &world)
 {
+    if (difficulty == "Hard" && question.difficulty == difficulty && world == question.world)
+    {
+        return true;
+    }
+    else if (difficulty == "Middle" && world == question.world)
+    {
+        if (question.difficulty == "Middle" || question.difficulty == "Beginner")
+        {
+            return true;
+        }
+        
+} else if (difficulty == "Beginner" && world == question.world && question.difficulty == difficulty)
+{
+    return true;
+}
+return false;
+}
+
+std::vector<Question> findQuestions(std::vector<Question> questions, const std::string &difficulty, const std::string &world)
+{
+    int questionCount = 0;
 
     cout << "Debug info:" << endl;
-    cout << "Category: " << category << endl;
     cout << "Difficulty: " << difficulty << endl;
     cout << "World: " << world << endl;
 
     std::vector<Question> result;
     for (auto &q : questions)
     {
-        if (q.category == category && q.difficulty == difficulty && q.world == world)
+        if (filter(q, difficulty, world))
         {
+            questionCount++;
+            if (questionCount > 5)
+            {
+                break;
+            }
             result.push_back(q);
             std::cout << q.question << endl;
             cout << endl;
@@ -75,7 +100,6 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
 
             if (checkAnswer(q, userChoice))
             {
-                clearScreen();
                 std::cout << "Correct! You earned 10 points." << std::endl;
                 // userScore += 10; // Add a variable to keep track of the user's score
             }

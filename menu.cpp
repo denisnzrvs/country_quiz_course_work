@@ -85,7 +85,7 @@ void playMenu()
         cout << "Enter your choice: ";
         cout << endl;
         cin >> worldPart;
-        if (worldPart == "Eu" || worldPart == "eu" || worldPart == "E" || worldPart == "e" || worldPart == "Am" || worldPart == "am" || worldPart == "Af" || worldPart == "a" || worldPart == "A" || worldPart == "All" || worldPart == "ALL")
+        if (worldPart == "Eu" || worldPart == "eu" || worldPart == "E" || worldPart == "e" || worldPart == "Am" || worldPart == "am" || worldPart == "Af" || worldPart == "af" || worldPart == "a" || worldPart == "A" || worldPart == "All" || worldPart == "ALL" || worldPart == "all")
         {
             clearScreen();
             setDifficulty(level);
@@ -93,7 +93,7 @@ void playMenu()
             cout << "Game starts now" << endl;
             // timer for 5 secqs
             vector<Question> questions = setupVector();
-            findQuestions(questions, "Flag", level, worldPart);
+            findQuestions(questions, level, worldPart);
         }
     }
 }
