@@ -5,6 +5,9 @@
 #include <vector>
 #include "printScores.cpp"
 
+#define MAGENTA_TEXT "\033[1;35m"
+#define RESET_COLOR "\033[0m"
+
 using namespace std;
 
 void setDifficulty(string &level)
@@ -62,19 +65,19 @@ void playMenu()
     string level;
     string worldPart;
 
-    cout << "Choose dificulty" << endl;
+    cout << MAGENTA_TEXT << "Choose dificulty" << RESET_COLOR << endl;
     cout << endl;
     cout << "B. Beginner" << endl;
     cout << "M. Middle" << endl;
     cout << "H. Hard" << endl;
     cout << endl;
-    cout << "Enter your choice: ";
+    cout << MAGENTA_TEXT << "Enter your choice: " << RESET_COLOR << endl;
     cout << endl;
     cin >> level;
     if (level == "B" || level == "b" || level == "M" || level == "m" || level == "H" || level == "h")
     {
         clearScreen();
-        cout << "Choose part of the World" << endl;
+        cout << MAGENTA_TEXT << "Choose part of the World" << RESET_COLOR << endl;
         cout << endl;
         cout << "Eu. Europe" << endl;
         cout << "E. East" << endl;
@@ -83,7 +86,7 @@ void playMenu()
         cout << "A. Asia" << endl;
         cout << "All." << endl;
         cout << endl;
-        cout << "Enter your choice: ";
+        cout << MAGENTA_TEXT << "Enter your choice: " << RESET_COLOR << endl;
         cout << endl;
         cin >> worldPart;
         if (worldPart == "Eu" || worldPart == "eu" || worldPart == "E" || worldPart == "e" || worldPart == "Am" || worldPart == "am" || worldPart == "Af" || worldPart == "af" || worldPart == "a" || worldPart == "A" || worldPart == "All" || worldPart == "ALL" || worldPart == "all")
@@ -117,14 +120,14 @@ void mainMenu(const std::string &message)
     char choice;
 
     clearScreen();
-    std::cout << "#### Country Quiz ####" << endl;
-    std::cout << "Welcome to Country Quiz!" << endl;
+    std::cout << MAGENTA_TEXT << "#### Country Quiz ####" << endl;
+    std::cout << "Welcome to Country Quiz!" << RESET_COLOR << endl;
     std::cout << endl;
     std::cout << "P. Play" << endl;
     std::cout << "S. Score" << endl;
     std::cout << "Q. Quit" << endl;
     std::cout << endl;
-    std::cout << message << " Enter your choice: ";
+    std::cout << MAGENTA_TEXT << message << " Enter your choice: " << RESET_COLOR;
 
     cin >> choice;
 

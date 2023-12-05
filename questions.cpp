@@ -12,6 +12,8 @@ int score = 0;
 #define GREEN_TEXT "\033[1;32m"
 #define RESET_COLOR "\033[0m"
 
+
+
 struct Question
 {
     std::string question;
