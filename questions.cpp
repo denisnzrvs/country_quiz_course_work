@@ -60,15 +60,18 @@ bool filter(const Question &question, const std::string &difficulty, const std::
             return true;
         }
         
-} else if (difficulty == "Beginner" && world == question.world && question.difficulty == difficulty)
-{
-    return true;
-}
-return false;
+    } else if (difficulty == "Beginner" && world == question.world && question.difficulty == difficulty)
+    {
+        return true;
+    }
+    return false;
 }
 
 std::vector<Question> findQuestions(std::vector<Question> questions, const std::string &difficulty, const std::string &world)
 {
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(questions.begin(), questions.end(), g);
     int questionCount = 0;
 
     cout << "Debug info:" << endl;
