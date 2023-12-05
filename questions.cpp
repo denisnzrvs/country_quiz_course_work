@@ -38,13 +38,6 @@ void addAnswers(Question &question, const std::vector<Question> &allQuestions)
     }
 
     std::shuffle(question.answers.begin(), question.answers.end(), g);
-
-    int index = 1;
-    for (const auto &a : question.answers)
-    {
-        std::cout << index << ". " << a << std::endl;
-        ++index;
-    }
 }
 
 bool checkAnswer(const Question &question, int userChoice)
@@ -52,14 +45,29 @@ bool checkAnswer(const Question &question, int userChoice)
     return question.answer == question.answers[userChoice - 1];
 }
 
-std::vector<Question> findQuestions(std::vector<Question> questions, const std::string& category, const std::string& difficulty, const std::string& world) {
+std::vector<Question> findQuestions(std::vector<Question> questions, const std::string &category, const std::string &difficulty, const std::string &world)
+{
+
+    cout << "Debug info:" << endl;
+    cout << "Category: " << category << endl;
+    cout << "Difficulty: " << difficulty << endl;
+    cout << "World: " << world << endl;
+
     std::vector<Question> result;
-    for (auto& q : questions) {
-        if (q.category == category && q.difficulty == difficulty && q.world == world) {
+    for (auto &q : questions)
+    {
+        if (q.category == category && q.difficulty == difficulty && q.world == world)
+        {
             result.push_back(q);
-            std::cout << q.question;
+            std::cout << q.question << endl;
+            cout << endl;
             addAnswers(q, questions);
-            //askQuestion(q);
+
+            for (int i = 0; i < q.answers.size(); i++)
+            {
+                cout << i + 1 << ". " << q.answers[i] << endl;
+            }
+            cout << endl;
 
             int userChoice;
             std::cout << "Enter the number of your answer: ";
@@ -67,6 +75,7 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
 
             if (checkAnswer(q, userChoice))
             {
+                clearScreen();
                 std::cout << "Correct! You earned 10 points." << std::endl;
                 // userScore += 10; // Add a variable to keep track of the user's score
             }
@@ -99,25 +108,6 @@ vector<Question> setupVector()
         q.world = doc.GetCell<std::string>("World", i);
 
         questions.push_back(q);
-    }
-
-    //findQuestions(questions, "Flag", "Easy", "Europe");
-
-
-
-     for (auto& q : questions) {
-        addAnswers(q, questions);
-    }
-
-    for (auto &q : questions)
-    {
-        std::cout << "Question: " << q.question << std::endl;
-        std::cout << "Answer: " << q.answer << std::endl;
-        std::cout << "Category: " << q.category << std::endl;
-        std::cout << "Difficulty: " << q.difficulty << std::endl;
-        std::cout << "World: " << q.world << std::endl;
-        std::cout << "Answers: " << q.answers.size() << std::endl;
-        std::cout << "---------------------------" << std::endl;
     }
 
     return questions;
