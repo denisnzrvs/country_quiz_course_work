@@ -59,6 +59,34 @@ void clearScreen()
     std::cout << "\033[2J\033[1;1H"; // ANSI escape code for clearing screen
 }
 
+void worldMenu(std::string &worldPart, std::string &level){
+    clearScreen();
+        cout << MAGENTA_TEXT << "Choose part of the World" << RESET_COLOR << endl;
+        cout << endl;
+        cout << "Eu. Europe" << endl;
+        cout << "E. East" << endl;
+        cout << "Am. America" << endl;
+        cout << "Af. Africa" << endl;
+        cout << "A. Asia" << endl;
+        cout << "All." << endl;
+        cout << endl;
+        cout << MAGENTA_TEXT << "Enter your choice: " << RESET_COLOR << endl;
+        cout << endl;
+    cin >> worldPart;
+    if (worldPart == "Eu" || worldPart == "eu" || worldPart == "E" || worldPart == "e" || worldPart == "Am" || worldPart == "am" || worldPart == "Af" || worldPart == "af" || worldPart == "a" || worldPart == "A" || worldPart == "All" || worldPart == "ALL" || worldPart == "all")
+        {
+            clearScreen();
+            setDifficulty(level);
+            setWorld(worldPart);
+            cout << "Game starts now" << endl;
+            // timer for 5 secqs
+            vector<Question> questions = setupVector();
+            findQuestions(questions, level, worldPart);
+        } else {   
+            worldMenu(worldPart, level);
+        }
+}
+
 void playMenu()
 {
     clearScreen();
@@ -76,29 +104,9 @@ void playMenu()
     cin >> level;
     if (level == "B" || level == "b" || level == "M" || level == "m" || level == "H" || level == "h")
     {
-        clearScreen();
-        cout << MAGENTA_TEXT << "Choose part of the World" << RESET_COLOR << endl;
-        cout << endl;
-        cout << "Eu. Europe" << endl;
-        cout << "E. East" << endl;
-        cout << "Am. America" << endl;
-        cout << "Af. Africa" << endl;
-        cout << "A. Asia" << endl;
-        cout << "All." << endl;
-        cout << endl;
-        cout << MAGENTA_TEXT << "Enter your choice: " << RESET_COLOR << endl;
-        cout << endl;
-        cin >> worldPart;
-        if (worldPart == "Eu" || worldPart == "eu" || worldPart == "E" || worldPart == "e" || worldPart == "Am" || worldPart == "am" || worldPart == "Af" || worldPart == "af" || worldPart == "a" || worldPart == "A" || worldPart == "All" || worldPart == "ALL" || worldPart == "all")
-        {
-            clearScreen();
-            setDifficulty(level);
-            setWorld(worldPart);
-            cout << "Game starts now" << endl;
-            // timer for 5 secqs
-            vector<Question> questions = setupVector();
-            findQuestions(questions, level, worldPart);
-        }
+        worldMenu(worldPart, level);
+    } else {   
+        playMenu();
     }
 }
 
