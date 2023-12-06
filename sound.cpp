@@ -1,79 +1,94 @@
-#include "libs/portaudio/include/portaudio.h"
 #include <iostream>
-#include <cmath>
+#include "./libs/portaudio/include/portaudio.h"
+#include "./libs/libsndfile/include/sndfile.h
+"
 
-#define SAMPLE_RATE (44100)
-#define FRAMES_PER_BUFFER (64)
-
-// Function to generate a simple sine wave
-static int paCallback(const void *inputBuffer, void *outputBuffer,
-                      unsigned long framesPerBuffer,
-                      const PaStreamCallbackTimeInfo *timeInfo,
-                      PaStreamCallbackFlags statusFlags,
-                      void *userData)
-{
-    float *out = (float *)outputBuffer;
-    const double TWO_PI = 6.28318530718;
-    static double phase = 0.0;
-
-    for (unsigned int i = 0; i < framesPerBuffer; i++)
-    {
-        *out++ = static_cast<float>(0.5 * std::sin(phase)); // Left channel
-        *out++ = static_cast<float>(0.5 * std::sin(phase)); // Right channel
-        phase += (TWO_PI * 440.0) / SAMPLE_RATE;
-        if (phase > TWO_PI)
-            phase -= TWO_PI;
-    }
-
-    return paContinue;
-}
+#define FILENAME "./audio/victory.wav"
 
 int main()
 {
-    PaError err;
+    SNDFILE *sndfile;
+    SF_INFO sfinfo;
     PaStream *stream;
+    PaError err;
 
+    // Open the WAV file for reading
+    sndfile = sf_open(FILENAME, SFM_READ, &sfinfo);
+    if (!sndfile)
+    {
+        std::cerr << "Error opening WAV file" << std::endl;
+        return 1;
+    }
+
+    // Initialize PortAudio
     err = Pa_Initialize();
     if (err != paNoError)
     {
-        std::cerr << "PortAudio initialization failed: " << Pa_GetErrorText(err) << std::endl;
+        std::cerr << "PortAudio initialization failed" << std::endl;
+        sf_close(sndfile);
         return 1;
     }
 
-    err = Pa_OpenDefaultStream(&stream, 0, 2, paFloat32, SAMPLE_RATE,
-                               FRAMES_PER_BUFFER, paCallback, nullptr);
+    // Set up PortAudio stream parameters
+    PaStreamParameters outputParameters;
+    outputParameters.device = Pa_GetDefaultOutputDevice();
+    outputParameters.channelCount = sfinfo.channels;
+    outputParameters.sampleFormat = paFloat32;
+    outputParameters.suggestedLatency = Pa_GetDeviceInfo(outputParameters.device)->defaultLowOutputLatency;
+    outputParameters.hostApiSpecificStreamInfo = nullptr;
+
+    // Open PortAudio stream
+    err = Pa_OpenStream(&stream, nullptr, &outputParameters, sfinfo.samplerate, paFramesPerBufferUnspecified, paNoFlag, nullptr, nullptr);
     if (err != paNoError)
     {
-        std::cerr << "PortAudio stream opening failed: " << Pa_GetErrorText(err) << std::endl;
+        std::cerr << "PortAudio stream opening failed" << std::endl;
+        sf_close(sndfile);
         Pa_Terminate();
         return 1;
     }
 
+    // Start the PortAudio stream
     err = Pa_StartStream(stream);
     if (err != paNoError)
     {
-        std::cerr << "PortAudio stream starting failed: " << Pa_GetErrorText(err) << std::endl;
+        std::cerr << "PortAudio stream starting failed" << std::endl;
         Pa_CloseStream(stream);
+        sf_close(sndfile);
         Pa_Terminate();
         return 1;
     }
 
-    std::cout << "Press Enter to exit..." << std::endl;
-    std::cin.get();
+    // Read and play the audio data
+    const int BUFFER_SIZE = 1024;
+    float buffer[BUFFER_SIZE * sfinfo.channels];
+    sf_count_t framesRead;
 
+    while ((framesRead = sf_readf_float(sndfile, buffer, BUFFER_SIZE)) > 0)
+    {
+        err = Pa_WriteStream(stream, buffer, framesRead);
+        if (err != paNoError)
+        {
+            std::cerr << "Error writing to PortAudio stream" << std::endl;
+            break;
+        }
+    }
+
+    // Stop and close the PortAudio stream
     err = Pa_StopStream(stream);
     if (err != paNoError)
     {
-        std::cerr << "PortAudio stream stopping failed: " << Pa_GetErrorText(err) << std::endl;
+        std::cerr << "PortAudio stream stopping failed" << std::endl;
     }
 
     err = Pa_CloseStream(stream);
     if (err != paNoError)
     {
-        std::cerr << "PortAudio stream closing failed: " << Pa_GetErrorText(err) << std::endl;
+        std::cerr << "PortAudio stream closing failed" << std::endl;
     }
 
+    // Terminate PortAudio and close the WAV file
     Pa_Terminate();
+    sf_close(sndfile);
 
     return 0;
 }
