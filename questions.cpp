@@ -12,8 +12,6 @@ int score = 0;
 #define GREEN_TEXT "\033[1;32m"
 #define RESET_COLOR "\033[0m"
 
-
-
 struct Question
 {
     std::string question;
@@ -24,7 +22,8 @@ struct Question
     std::vector<std::string> answers;
 };
 
-void printSeparator() {
+void printSeparator()
+{
     std::cout << "-----------------------------------" << std::endl;
 }
 
@@ -70,8 +69,8 @@ bool filter(const Question &question, const std::string &difficulty, const std::
         {
             return true;
         }
-        
-    } else if (difficulty == "Beginner" && world == question.world && question.difficulty == difficulty)
+    }
+    else if (difficulty == "Beginner" && world == question.world && question.difficulty == difficulty)
     {
         return true;
     }
@@ -85,7 +84,6 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
     std::shuffle(questions.begin(), questions.end(), g);
     int questionCount = 0;
 
-    cout << "Debug info:" << endl;
     cout << "Difficulty: " << difficulty << endl;
     cout << "World: " << world << endl;
 
