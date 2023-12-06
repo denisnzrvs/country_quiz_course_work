@@ -48,7 +48,7 @@ void setWorld(string &worldPart)
     {
         worldPart = "Asia";
     }
-    else if (worldPart == "All" || worldPart == "ALL")
+    else if (worldPart == "All" || worldPart == "ALL" || worldPart == "all")
     {
         worldPart = "All";
     }
@@ -113,7 +113,7 @@ void playMenu()
 void scoreMenu()
 {
     clearScreen();
-    cout << "score menu selected!";
+    cout << "Score menu selected!";
 }
 
 void quitGame()

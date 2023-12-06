@@ -53,9 +53,22 @@ struct Question
     std::vector<std::string> answers;
 };
 
-void printSeparator()
-{
-    std::cout << "-----------------------------------" << std::endl;
+void printSeparator() {
+    std::cout << "<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>" << std::endl;
+}
+
+void printWin() {
+    std::cout << R"(
+      ....           ....           ....           ....
+     ||             ||             ||             ||
+ /'''l|\        /'''l|\        /'''l|\        /'''l|\
+/_______\      /_______\      /_______\      /_______\
+|  .-.  |------|  .-.  |------|  .-.  |------|  .-.  |------
+ __|L|__| .--. |__|L|__| .--. |__|L|__| .--. |__|L|__| .--.
+_\  \\p__`o-o'__\  \\p__`o-o'__\  \\p__`o-o'__\  \\p__`o-o'_
+------------------------------------------------------------
+------------------------------------------------------------
+)" << std::endl;
 }
 
 void addAnswers(Question &question, const std::vector<Question> &allQuestions)
@@ -85,14 +98,42 @@ void addAnswers(Question &question, const std::vector<Question> &allQuestions)
 
 bool checkAnswer(const Question &question, int userChoice)
 {
+    if (userChoice != 1 && userChoice != 2 && userChoice != 3)
+    {
+        std::cin.clear();  // Clear the error state
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Ignore invalid input
+        return false;
+    }
     return question.answer == question.answers[userChoice - 1];
 }
 
-bool filter(const Question &question, const std::string &difficulty, const std::string &world)
+bool allAdd(const Question &question, const std::string &difficulty)
 {
-    if (difficulty == "Hard" && question.difficulty == difficulty && world == question.world)
+    if (difficulty == "Hard" && (question.difficulty == "Hard" || question.difficulty == "Middle" || question.difficulty == "Beginner"))
     {
         return true;
+    }
+    else if (difficulty == "Middle" && (question.difficulty == "Middle" || question.difficulty == "Beginner"))
+    {
+        return true;
+    }
+    else if (difficulty == "Beginner" && question.difficulty == "Beginner")
+    {
+        return true;
+    }
+    return false;
+}
+bool filter(const Question &question, const std::string &difficulty, const std::string &world)
+{ 
+    if (world == "All"){
+        return allAdd(question, difficulty);
+    }
+    if (difficulty == "Hard" && question.difficulty == difficulty && world == question.world)
+    {
+        if (question.difficulty == "Middle" || question.difficulty == "Beginner" || question.difficulty == "Hard")
+        {
+            return true;
+        }
     }
     else if (difficulty == "Middle" && world == question.world)
     {
@@ -115,8 +156,10 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
     std::shuffle(questions.begin(), questions.end(), g);
     int questionCount = 0;
 
-    std::cout << "Difficulty: " << difficulty << std::endl;
-    std::cout << "World: " << world << std::endl;
+    cout << "Enter only number of the number you choose >>" << endl;
+    cout << " " << endl;
+    cout << "Difficulty: " << difficulty << endl;
+    cout << "World: " << world << endl;
 
     std::vector<Question> result;
     for (auto &q : questions)
@@ -131,10 +174,10 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
             result.push_back(q);
             printSeparator();
             std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-            // clearScreen(); // Assuming you have a function named clearScreen
-            isAnswered = false;
-            std::cout << q.question << std::endl;
-            std::cout << std::endl;
+            clearScreen();
+            printSeparator();
+            std::cout << q.question << endl;
+            cout << endl;
             addAnswers(q, questions);
 
             for (int i = 0; i < q.answers.size(); i++)
@@ -146,14 +189,8 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
             int userChoice;
             boost::thread timer(timerFunc);
             std::cout << "Enter the number of your answer: ";
-            if (!isAnswered && !isTimerDone)
-            {
-                std::cin >> userChoice;
-                isAnswered = true;
-            }
+            std::cin >> userChoice;
 
-            timer.join();
-            timer.interrupt();
 
             if (checkAnswer(q, userChoice))
             {
@@ -173,7 +210,8 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
     std::string username;
     std::cin >> username;
     writeScore(username, score);
-    std::cout << "Thanks for playing!";
+    cout << "Thanks for playing!";
+    printWin();
 
     return result;
 }
