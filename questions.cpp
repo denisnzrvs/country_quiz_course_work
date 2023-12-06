@@ -6,11 +6,27 @@
 #include <random>
 #include <chrono>
 #include <thread>
+#include <atomic>
 #include "writeScore.cpp"
 int score = 0;
 #define RED_TEXT "\033[1;31m"
 #define GREEN_TEXT "\033[1;32m"
 #define RESET_COLOR "\033[0m"
+
+atomic<bool> isAnswered(false);
+
+void timerFunc()
+{
+    while (!isAnswered)
+    {
+        // wait for 30 seconds, make a printout every second
+        for (int i = 30; i > 0; i--)
+        {
+            std::cout << "Time left: " << i << " seconds" << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        }
+    }
+}
 
 struct Question
 {
@@ -101,6 +117,7 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
             printSeparator();
             std::this_thread::sleep_for(std::chrono::milliseconds(3000));
             clearScreen();
+            isAnswered = false;
             std::cout << q.question << endl;
             cout << endl;
             addAnswers(q, questions);
@@ -112,8 +129,10 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
             cout << endl;
 
             int userChoice;
+            thread timer(timerFunc);
             std::cout << "Enter the number of your answer: ";
             std::cin >> userChoice;
+            isAnswered = true;
 
             if (checkAnswer(q, userChoice))
             {
