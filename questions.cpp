@@ -7,6 +7,7 @@
 #include <chrono>
 #include <atomic>
 #include "writeScore.cpp"
+#include <thread>
 
 int score = 0;
 #define RED_TEXT "\033[1;31m"

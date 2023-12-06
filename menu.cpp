@@ -161,9 +161,3 @@ void mainMenu(const std::string &message)
         mainMenu("Invalid choice!");
     }
 }
-
-int main()
-{
-    mainMenu("");
-    return 0;
-}
