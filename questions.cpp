@@ -3,10 +3,8 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include <boost/thread.hpp>
 #include <random>
 #include <chrono>
-#include <thread>
 #include <atomic>
 #include "writeScore.cpp"
 
@@ -14,34 +12,6 @@ int score = 0;
 #define RED_TEXT "\033[1;31m"
 #define GREEN_TEXT "\033[1;32m"
 #define RESET_COLOR "\033[0m"
-
-std::atomic<bool> isAnswered(false);
-std::atomic<bool> isTimerDone(false);
-
-void timerFunc()
-{
-    // wait for 3 seconds, make a printout every second
-    for (int i = 3; i > 0; i--)
-    {
-        std::cout << "Time left: " << i << " seconds" << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
-        if (isAnswered)
-        {
-            break;
-        }
-    }
-
-    if (!isAnswered)
-    {
-        std::cout << RED_TEXT << "Time is up! Next question!" << RESET_COLOR << std::endl;
-        std::cin.clear();
-        std::cin.ignore(10000, '\n');
-        std::cin.setstate(std::ios::failbit);
-    }
-
-    isTimerDone = true;
-}
 
 struct Question
 {
@@ -53,11 +23,13 @@ struct Question
     std::vector<std::string> answers;
 };
 
-void printSeparator() {
+void printSeparator()
+{
     std::cout << "<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>" << std::endl;
 }
 
-void printWin() {
+void printWin()
+{
     std::cout << R"(
       ....           ....           ....           ....
      ||             ||             ||             ||
@@ -100,8 +72,8 @@ bool checkAnswer(const Question &question, int userChoice)
 {
     if (userChoice != 1 && userChoice != 2 && userChoice != 3)
     {
-        std::cin.clear();  // Clear the error state
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Ignore invalid input
+        std::cin.clear();                                                   // Clear the error state
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore invalid input
         return false;
     }
     return question.answer == question.answers[userChoice - 1];
@@ -124,8 +96,9 @@ bool allAdd(const Question &question, const std::string &difficulty)
     return false;
 }
 bool filter(const Question &question, const std::string &difficulty, const std::string &world)
-{ 
-    if (world == "All"){
+{
+    if (world == "All")
+    {
         return allAdd(question, difficulty);
     }
     if (difficulty == "Hard" && question.difficulty == difficulty && world == question.world)
@@ -187,10 +160,8 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
             std::cout << std::endl;
 
             int userChoice;
-            boost::thread timer(timerFunc);
             std::cout << "Enter the number of your answer: ";
             std::cin >> userChoice;
-
 
             if (checkAnswer(q, userChoice))
             {
