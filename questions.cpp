@@ -3,16 +3,45 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <boost/thread.hpp>
 #include <random>
 #include <chrono>
 #include <thread>
+#include <atomic>
 #include "writeScore.cpp"
+
 int score = 0;
 #define RED_TEXT "\033[1;31m"
 #define GREEN_TEXT "\033[1;32m"
 #define RESET_COLOR "\033[0m"
 
+std::atomic<bool> isAnswered(false);
+std::atomic<bool> isTimerDone(false);
 
+void timerFunc()
+{
+    // wait for 3 seconds, make a printout every second
+    for (int i = 3; i > 0; i--)
+    {
+        std::cout << "Time left: " << i << " seconds" << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+        if (isAnswered)
+        {
+            break;
+        }
+    }
+
+    if (!isAnswered)
+    {
+        std::cout << RED_TEXT << "Time is up! Next question!" << RESET_COLOR << std::endl;
+        std::cin.clear();
+        std::cin.ignore(10000, '\n');
+        std::cin.setstate(std::ios::failbit);
+    }
+
+    isTimerDone = true;
+}
 
 struct Question
 {
@@ -112,8 +141,8 @@ bool filter(const Question &question, const std::string &difficulty, const std::
         {
             return true;
         }
-        
-    } else if (difficulty == "Beginner" && world == question.world && question.difficulty == difficulty)
+    }
+    else if (difficulty == "Beginner" && world == question.world && question.difficulty == difficulty)
     {
         return true;
     }
@@ -129,7 +158,6 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
 
     cout << "Enter only number of the number you choose >>" << endl;
     cout << " " << endl;
-    cout << "You have 30 seconds to complete the quiz " << endl;
     cout << "Difficulty: " << difficulty << endl;
     cout << "World: " << world << endl;
 
@@ -154,11 +182,12 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
 
             for (int i = 0; i < q.answers.size(); i++)
             {
-                cout << i + 1 << ". " << q.answers[i] << endl;
+                std::cout << i + 1 << ". " << q.answers[i] << std::endl;
             }
-            cout << endl;
+            std::cout << std::endl;
 
             int userChoice;
+            boost::thread timer(timerFunc);
             std::cout << "Enter the number of your answer: ";
             std::cin >> userChoice;
 
@@ -175,11 +204,11 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
         }
     }
 
-    cout << endl;
-    cout << "End of game! Your score is: " << score << endl;
-    cout << "Let's save your game. Enter your name: ";
-    string username;
-    cin >> username;
+    std::cout << std::endl;
+    std::cout << "End of game! Your score is: " << score << std::endl;
+    std::cout << "Let's save your game. Enter your name: ";
+    std::string username;
+    std::cin >> username;
     writeScore(username, score);
     cout << "Thanks for playing!";
     printWin();
@@ -187,7 +216,7 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
     return result;
 }
 
-vector<Question> setupVector()
+std::vector<Question> setupVector()
 {
     std::string csv = "libs/country_questions.csv";
 
