@@ -1,9 +1,7 @@
 # country_quiz_course_work
 A fun little country quiz game that will definitely test your geography knowledge from middle school!
 
->This game has been developed on macOS and might not work properly on other systems.
-> Known bugs
-> [ ] Emojis not showing up in Windows command prompt/Terminal/PowerShell, as they don't have emoji support. If can, use WSL terminal, known to fix the issue.
+>This game has been developed on macOS and might not work properly on other systems. What we definitely know and can't fix is that emojis are not showing up in Windows command prompt/Terminal/PowerShell, as they don't have emoji support. If can, please use WSL terminal, as it is known to fix the issue.
 
 ### Installation
 Use one of the executables available in the Releases section, compiled for your platform.
