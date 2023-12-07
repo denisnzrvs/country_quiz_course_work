@@ -1,3 +1,4 @@
+#include "colors.h"
 #include "libs/rapidcsv.h"
 #include <iostream>
 #include <vector>
@@ -10,9 +11,6 @@
 #include <thread>
 
 int score = 0;
-#define RED_TEXT "\033[1;31m"
-#define GREEN_TEXT "\033[1;32m"
-#define RESET_COLOR "\033[0m"
 
 struct Question
 {
@@ -130,7 +128,7 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
     std::shuffle(questions.begin(), questions.end(), g);
     int questionCount = 0;
 
-    cout << "Enter only number of the number you choose >>" << endl;
+    cout << "Enter only number of the answer you choose >>" << endl;
     cout << " " << endl;
     cout << "Difficulty: " << difficulty << endl;
     cout << "World: " << world << endl;

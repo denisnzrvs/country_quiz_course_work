@@ -1,3 +1,4 @@
+#include "colors.h"
 #include <iostream>
 #include <string>
 #include "menu.h"
@@ -5,11 +6,8 @@
 #include <vector>
 #include "printScores.cpp"
 
-#define MAGENTA_TEXT "\033[1;35m"
-#define RESET_COLOR "\033[0m"
-
 using namespace std;
-
+// Function to set difficulty
 void setDifficulty(string &level)
 {
     if (level == "B" || level == "b")
@@ -26,6 +24,7 @@ void setDifficulty(string &level)
     }
 }
 
+// Function to set world
 void setWorld(string &worldPart)
 {
     if (worldPart == "Eu" || worldPart == "eu")
@@ -54,93 +53,54 @@ void setWorld(string &worldPart)
     }
 }
 
+// Function to clear the screen
 void clearScreen()
 {
-    std::cout << "\033[2J\033[1;1H"; // ANSI escape code for clearing screen
+    cout << "\033[2J\033[1;1H"; // ANSI escape code for clearing screen
 }
 
-void worldMenu(std::string &worldPart, std::string &level)
+// Function to print world menu
+void printWorldMenu()
 {
-    clearScreen();
-    cout << MAGENTA_TEXT << "Choose part of the World" << RESET_COLOR << endl;
-    cout << endl;
-    cout << "Eu. Europe" << endl;
-    cout << "E. East" << endl;
-    cout << "Am. America" << endl;
-    cout << "Af. Africa" << endl;
-    cout << "A. Asia" << endl;
-    cout << "All." << endl;
-    cout << endl;
-    cout << MAGENTA_TEXT << "Enter your choice: " << RESET_COLOR << endl;
-    cout << endl;
-    cin >> worldPart;
-    if (worldPart == "Eu" || worldPart == "eu" || worldPart == "E" || worldPart == "e" || worldPart == "Am" || worldPart == "am" || worldPart == "Af" || worldPart == "af" || worldPart == "a" || worldPart == "A" || worldPart == "All" || worldPart == "ALL" || worldPart == "all")
-    {
-        clearScreen();
-        setDifficulty(level);
-        setWorld(worldPart);
-        cout << "Game starts now" << endl;
-        // timer for 5 secqs
-        vector<Question> questions = setupVector();
-        findQuestions(questions, level, worldPart);
-    }
-    else
-    {
-        worldMenu(worldPart, level);
-    }
+    cout << MAGENTA_TEXT << "Choose part of the World" << RESET_COLOR << "\n"
+         << "Eu. Europe\n"
+         << "E. East\n"
+         << "Am. America\n"
+         << "Af. Africa\n"
+         << "A. Asia\n"
+         << "All.\n\n"
+         << MAGENTA_TEXT << "Enter your choice: " << RESET_COLOR << "\n\n";
 }
 
-void playMenu()
+// Function to validate world part input
+bool isValidWorldPart(const string &choice)
 {
-    clearScreen();
-    string level;
-    string worldPart;
-
-    cout << MAGENTA_TEXT << "Choose dificulty" << RESET_COLOR << endl;
-    cout << endl;
-    cout << "B. Beginner" << endl;
-    cout << "M. Middle" << endl;
-    cout << "H. Hard" << endl;
-    cout << endl;
-    cout << MAGENTA_TEXT << "Enter your choice: " << RESET_COLOR << endl;
-    cout << endl;
-    cin >> level;
-    if (level == "B" || level == "b" || level == "M" || level == "m" || level == "H" || level == "h")
-    {
-        worldMenu(worldPart, level);
-    }
-    else
-    {
-        playMenu();
-    }
+    const vector<string> validChoices = {"Eu", "eu", "E", "e", "Am", "am", "Af", "af", "a", "A", "All", "ALL", "all"};
+    return find(validChoices.begin(), validChoices.end(), choice) != validChoices.end();
 }
 
-void scoreMenu()
+// Function to print difficulty menu
+void printDifficultyMenu()
 {
-    clearScreen();
-    cout << "Score menu selected!";
+    cout << MAGENTA_TEXT << "Choose difficulty" << RESET_COLOR << "\n"
+         << "B. Beginner\n"
+         << "M. Middle\n"
+         << "H. Hard\n\n"
+         << MAGENTA_TEXT << "Enter your choice: " << RESET_COLOR << "\n\n";
 }
 
-void quitGame()
-{
-    clearScreen();
-    cout << "Thanks for playing! See you next time!";
-    exit(0);
-}
-
-void mainMenu(const std::string &message)
+// Function to print main menu
+void printMainMenu(const string &message)
 {
     char choice;
 
     clearScreen();
-    std::cout << MAGENTA_TEXT << "#### Country Quiz ####" << endl;
-    std::cout << "Welcome to Country Quiz!" << RESET_COLOR << endl;
-    std::cout << endl;
-    std::cout << "P. Play" << endl;
-    std::cout << "S. Score" << endl;
-    std::cout << "Q. Quit" << endl;
-    std::cout << endl;
-    std::cout << MAGENTA_TEXT << message << " Enter your choice: " << RESET_COLOR;
+    cout << MAGENTA_TEXT << "#### Country Quiz ####\n"
+         << "Welcome to Country Quiz!" << RESET_COLOR << "\n"
+         << "P. Play\n"
+         << "S. Score\n"
+         << "Q. Quit\n\n"
+         << MAGENTA_TEXT << message << " Enter your choice: " << RESET_COLOR;
 
     cin >> choice;
 
@@ -154,10 +114,50 @@ void mainMenu(const std::string &message)
     }
     else if (choice == 'Q' || choice == 'q')
     {
-        quitGame();
+        exit(0);
     }
     else
     {
-        mainMenu("Invalid choice!");
+        printMainMenu("Invalid choice!");
+    }
+}
+
+// Function to print world menu and get user input
+void getWorldInput(string &worldPart, string &level)
+{
+    printWorldMenu();
+    cin >> worldPart;
+    if (isValidWorldPart(worldPart))
+    {
+        clearScreen();
+        setDifficulty(level);
+        setWorld(worldPart);
+        cout << "Game starts now" << endl;
+        // timer for 5 seconds
+        vector<Question> questions = setupVector();
+        findQuestions(questions, level, worldPart);
+    }
+    else
+    {
+        printWorldMenu();
+    }
+}
+
+// Function to handle difficulty menu and world menu
+void playMenu()
+{
+    clearScreen();
+    string level;
+    string worldPart;
+
+    printDifficultyMenu();
+    cin >> level;
+    if (level == "B" || level == "b" || level == "M" || level == "m" || level == "H" || level == "h")
+    {
+        getWorldInput(worldPart, level);
+    }
+    else
+    {
+        playMenu();
     }
 }
