@@ -27,6 +27,12 @@ void printMainMenu(const std::string &message);
 // Function to print world menu and get user input
 void getWorldInput(std::string &worldPart, std::string &level);
 
+// Function to validate difficulty input
+bool isValidDifficulty(const std::string &choice);
+
+// Function to get difficulty input from the user
+std::string getDifficultyInput();
+
 // Function to handle difficulty menu and world menu
 void playMenu();
 
