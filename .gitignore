@@ -3,3 +3,5 @@ output/
 .vscode/
 sound
 sound.cpp
+scores.txt
+coutry_quiz
