@@ -5,52 +5,31 @@
 #include "questions.cpp"
 #include <vector>
 #include "printScores.cpp"
+#include <algorithm>
+#include <map>
 
 using namespace std;
 
 // sets difficulty as string to filter questions in findQuestions() (questions.cpp). Runs after user has selected a difficulty.
 void setDifficulty(string &level)
 {
-    if (level == "B" || level == "b")
+    static const map<string, string> difficultyMap = {{"B", "Beginner"}, {"M", "Middle"}, {"H", "Hard"}};
+    auto it = difficultyMap.find(level);
+    if (it != difficultyMap.end())
     {
-        level = "Beginner";
-    }
-    else if (level == "M" || level == "m")
-    {
-        level = "Middle";
-    }
-    else if (level == "H" || level == "h")
-    {
-        level = "Hard";
+        level = it->second;
     }
 }
 
 // Function to set the part of the world as a string to filter in findQuestions() (questions.cpp). Runs after user has selected a part of the world.
 void setWorld(string &worldPart)
 {
-    if (worldPart == "Eu" || worldPart == "eu")
+    static const map<string, string> worldMap = {
+        {"Eu", "Europe"}, {"E", "East"}, {"Am", "America"}, {"Af", "Africa"}, {"A", "Asia"}, {"All", "All"}};
+    auto it = worldMap.find(worldPart);
+    if (it != worldMap.end())
     {
-        worldPart = "Europe";
-    }
-    else if (worldPart == "E" || worldPart == "e")
-    {
-        worldPart = "East";
-    }
-    else if (worldPart == "Am" || worldPart == "am")
-    {
-        worldPart = "America";
-    }
-    else if (worldPart == "Af" || worldPart == "af")
-    {
-        worldPart = "Africa";
-    }
-    else if (worldPart == "A" || worldPart == "a")
-    {
-        worldPart = "Asia";
-    }
-    else if (worldPart == "All" || worldPart == "ALL" || worldPart == "all")
-    {
-        worldPart = "All";
+        worldPart = it->second;
     }
 }
 
@@ -72,14 +51,15 @@ void printWorldMenu()
          << MAGENTA_TEXT << "Enter your choice: " << RESET_COLOR << "\n\n";
 }
 
-// Function to validate world part input
 bool isValidWorldPart(const string &choice)
 {
     const vector<string> validChoices = {"Eu", "eu", "E", "e", "Am", "am", "Af", "af", "a", "A", "All", "ALL", "all"};
-    return find(validChoices.begin(), validChoices.end(), choice) != validChoices.end();
+
+    return std::any_of(validChoices.begin(), validChoices.end(),
+                       [&](const string &validChoice)
+                       { return validChoice == choice; });
 }
 
-// Function to print difficulty menu
 void printDifficultyMenu()
 {
     cout << MAGENTA_TEXT << "Choose difficulty" << RESET_COLOR << "\n"
@@ -89,7 +69,6 @@ void printDifficultyMenu()
          << MAGENTA_TEXT << "Enter your choice: " << RESET_COLOR << "\n\n";
 }
 
-// Function to print main menu
 void printMainMenu(const string &message)
 {
     char choice;
@@ -122,7 +101,6 @@ void printMainMenu(const string &message)
     }
 }
 
-// Function to print world menu and get user input
 void getWorldInput(string &worldPart, string &level)
 {
     printWorldMenu();
@@ -143,21 +121,34 @@ void getWorldInput(string &worldPart, string &level)
     }
 }
 
-// Function to handle difficulty menu and world menu
+bool isValidDifficulty(const string &choice)
+{
+    const vector<string> validDifficulties = {"B", "b", "M", "m", "H", "h"};
+    return find(validDifficulties.begin(), validDifficulties.end(), choice) != validDifficulties.end();
+}
+
+// Function to get difficulty input from the user
+string getDifficultyInput()
+{
+    string level;
+    printDifficultyMenu();
+    cin >> level;
+    return level;
+}
+
+// Function to handle the play menu
 void playMenu()
 {
     clearScreen();
-    string level;
-    string worldPart;
+    string level = getDifficultyInput();
 
-    printDifficultyMenu();
-    cin >> level;
-    if (level == "B" || level == "b" || level == "M" || level == "m" || level == "H" || level == "h")
+    if (isValidDifficulty(level))
     {
+        string worldPart;
         getWorldInput(worldPart, level);
     }
     else
     {
-        playMenu();
+        playMenu(); // If the input is invalid, recursively call playMenu again
     }
 }
