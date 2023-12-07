@@ -121,11 +121,28 @@ bool filter(const Question &question, const std::string &difficulty, const std::
     return false;
 }
 
-std::vector<Question> findQuestions(std::vector<Question> questions, const std::string &difficulty, const std::string &world)
+void finish(const int score)
+    {
+    std::cout << std::endl;
+    std::cout << "End of game! Your score is: " << score << std::endl;
+    std::cout << "Let's save your game. Enter your name: ";
+    std::string username;
+    std::cin >> username;
+    writeScore(username, score);
+    cout << "Thanks for playing!";
+    printWin();
+}
+
+void randomize(std::vector<Question> &questions)
 {
     std::random_device rd;
     std::mt19937 g(rd());
     std::shuffle(questions.begin(), questions.end(), g);
+}
+
+std::vector<Question> findQuestions(std::vector<Question> questions, const std::string &difficulty, const std::string &world)
+{   
+    randomize(questions);
     int questionCount = 0;
 
     cout << "Enter only number of the answer you choose >>" << endl;
@@ -174,15 +191,7 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
         }
     }
 
-    std::cout << std::endl;
-    std::cout << "End of game! Your score is: " << score << std::endl;
-    std::cout << "Let's save your game. Enter your name: ";
-    std::string username;
-    std::cin >> username;
-    writeScore(username, score);
-    cout << "Thanks for playing!";
-    printWin();
-
+    finish(score);
     return result;
 }
 

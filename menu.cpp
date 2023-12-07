@@ -85,16 +85,17 @@ void printMainMenu(const string &message)
          << MAGENTA_TEXT << message << " Enter your choice: " << RESET_COLOR;
 
     cin >> choice;
+    boost::to_lower(choice);
 
-    if (choice == 'P' || choice == 'p')
+    if (choice == 'p')
     {
         playMenu();
     }
-    else if (choice == 'S' || choice == 's')
+    else if (choice == 's')
     {
         printScores();
     }
-    else if (choice == 'Q' || choice == 'q')
+    else if (choice == 'q')
     {
         exit(0);
     }
