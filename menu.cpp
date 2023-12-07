@@ -7,17 +7,18 @@
 #include "printScores.cpp"
 #include <algorithm>
 #include <map>
+#include <boost/algorithm/string.hpp>
 
 using namespace std;
 
 // sets difficulty as string to filter questions in findQuestions() (questions.cpp). Runs after user has selected a difficulty.
-void setDifficulty(string &level)
+void setDifficulty(string &difficulty)
 {
-    static const map<string, string> difficultyMap = {{"B", "Beginner"}, {"M", "Middle"}, {"H", "Hard"}};
-    auto it = difficultyMap.find(level);
+    static const map<string, string> difficultyMap = {{"b", "Beginner"}, {"m", "Middle"}, {"h", "Hard"}};
+    auto it = difficultyMap.find(difficulty);
     if (it != difficultyMap.end())
     {
-        level = it->second;
+        difficulty = it->second;
     }
 }
 
@@ -25,7 +26,7 @@ void setDifficulty(string &level)
 void setWorld(string &worldPart)
 {
     static const map<string, string> worldMap = {
-        {"Eu", "Europe"}, {"E", "East"}, {"Am", "America"}, {"Af", "Africa"}, {"A", "Asia"}, {"All", "All"}};
+        {"eu", "Europe"}, {"e", "East"}, {"am", "America"}, {"af", "Africa"}, {"a", "Asia"}, {"all", "All"}};
     auto it = worldMap.find(worldPart);
     if (it != worldMap.end())
     {
@@ -53,11 +54,13 @@ void printWorldMenu()
 
 bool isValidWorldPart(const string &choice)
 {
-    const vector<string> validChoices = {"Eu", "eu", "E", "e", "Am", "am", "Af", "af", "a", "A", "All", "ALL", "all"};
-
+    const vector<string> validChoices = {"eu", "e", "am", "af", "a", "all"};
+    string lowerChoice = choice;
+    boost::to_lower(lowerChoice);
     return std::any_of(validChoices.begin(), validChoices.end(),
-                       [&](const string &validChoice)
-                       { return validChoice == choice; });
+                       [&](const std::string& validChoice) {
+                           return boost::iequals(validChoice, lowerChoice);
+                       });
 }
 
 void printDifficultyMenu()
@@ -101,51 +104,55 @@ void printMainMenu(const string &message)
     }
 }
 
-void getWorldInput(string &worldPart, string &level)
+void getWorldInput(string &worldPart, string &difficulty)
 {
     printWorldMenu();
     cin >> worldPart;
+    boost::to_lower(worldPart);
     if (isValidWorldPart(worldPart))
     {
         clearScreen();
-        setDifficulty(level);
+        setDifficulty(difficulty);
         setWorld(worldPart);
         cout << "Game starts now" << endl;
         // timer for 5 seconds
         vector<Question> questions = setupVector();
-        findQuestions(questions, level, worldPart);
+        findQuestions(questions, difficulty, worldPart);
     }
     else
     {
-        getWorldInput(worldPart, level);
+        getWorldInput(worldPart, difficulty);
     }
 }
 
 bool isValidDifficulty(const string &choice)
 {
-    const vector<string> validDifficulties = {"B", "b", "M", "m", "H", "h"};
-    return find(validDifficulties.begin(), validDifficulties.end(), choice) != validDifficulties.end();
+    const vector<string> validDifficulties = {"b", "m", "h"};
+    string lowerChoice = choice;
+    boost::to_lower(lowerChoice);
+    return find(validDifficulties.begin(), validDifficulties.end(), lowerChoice) != validDifficulties.end();
 }
 
 // Function to get difficulty input from the user
 string getDifficultyInput()
 {
-    string level;
+    string difficulty;
     printDifficultyMenu();
-    cin >> level;
-    return level;
+    cin >> difficulty;
+    boost::to_lower(difficulty);
+    return difficulty;
 }
 
 // Function to handle the play menu
 void playMenu()
 {
     clearScreen();
-    string level = getDifficultyInput();
+    string difficulty = getDifficultyInput();
 
-    if (isValidDifficulty(level))
+    if (isValidDifficulty(difficulty))
     {
         string worldPart;
-        getWorldInput(worldPart, level);
+        getWorldInput(worldPart, difficulty);
     }
     else
     {
