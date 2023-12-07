@@ -1,3 +1,5 @@
 lidl 180
 Denis 20
  0
+Denis 30
+Denis 50

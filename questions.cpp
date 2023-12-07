@@ -3,10 +3,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <algorithm>
 #include <random>
 #include <chrono>
-#include <atomic>
 #include "writeScore.cpp"
 #include <thread>
 
@@ -14,22 +12,22 @@ int score = 0;
 
 struct Question
 {
-    std::string question;
-    std::string answer;
-    std::string category;
-    std::string difficulty;
-    std::string world;
-    std::vector<std::string> answers;
+    string question;
+    string answer;
+    string category;
+    string difficulty;
+    string world;
+    vector<string> answers;
 };
 
 void printSeparator()
 {
-    std::cout << "<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>" << std::endl;
+    cout << "<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>:<:>" << endl;
 }
 
 void printWin()
 {
-    std::cout << R"(
+    cout << R"(
       ....           ....           ....           ....
      ||             ||             ||             ||
  /'''l|\        /'''l|\        /'''l|\        /'''l|\
@@ -39,14 +37,17 @@ void printWin()
 _\  \\p__`o-o'__\  \\p__`o-o'__\  \\p__`o-o'__\  \\p__`o-o'_
 ------------------------------------------------------------
 ------------------------------------------------------------
-)" << std::endl;
+)" << endl;
 }
 
-void addAnswers(Question &question, const std::vector<Question> &allQuestions)
+// Every question contains the correct answer for it. This function adds two random answers and the correct answer to the Question object's answers vector.
+void addAnswers(Question &question, const vector<Question> &allQuestions)
 {
+    // adds the correct answer to the answers vector
     question.answers.push_back(question.answer);
 
-    std::vector<std::string> otherAnswers;
+    // filters all the other (non-correct) answers
+    vector<string> otherAnswers;
     for (const auto &q : allQuestions)
     {
         if (q.answer != question.answer)
@@ -54,71 +55,43 @@ void addAnswers(Question &question, const std::vector<Question> &allQuestions)
             otherAnswers.push_back(q.answer);
         }
     }
+    // randomises the vector of non-correct answers
+    random_device rd;
+    mt19937 g(rd());
+    shuffle(otherAnswers.begin(), otherAnswers.end(), g);
 
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::shuffle(otherAnswers.begin(), otherAnswers.end(), g);
-
+    // adds the first two answers from the randomised vector to the answers vector of the question.
     for (size_t i = 0; i < 2; ++i)
     {
         question.answers.push_back(otherAnswers[i]);
     }
-
-    std::shuffle(question.answers.begin(), question.answers.end(), g);
+    // shuffles all the answers of the question iself.
+    shuffle(question.answers.begin(), question.answers.end(), g);
 }
 
+// checks if the user's answer to the question is valid. If not, ignores the input.
 bool checkAnswer(const Question &question, int userChoice)
 {
     if (userChoice != 1 && userChoice != 2 && userChoice != 3)
     {
-        std::cin.clear();                                                   // Clear the error state
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore invalid input
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         return false;
     }
     return question.answer == question.answers[userChoice - 1];
 }
 
-bool allAdd(const Question &question, const std::string &difficulty)
-{
-    if (difficulty == "Hard" && (question.difficulty == "Hard" || question.difficulty == "Middle" || question.difficulty == "Beginner"))
-    {
-        return true;
-    }
-    else if (difficulty == "Middle" && (question.difficulty == "Middle" || question.difficulty == "Beginner"))
-    {
-        return true;
-    }
-    else if (difficulty == "Beginner" && question.difficulty == "Beginner")
-    {
-        return true;
-    }
-    return false;
-}
 bool filter(const Question &question, const std::string &difficulty, const std::string &world)
 {
-    if (world == "All")
-    {
-        return allAdd(question, difficulty);
-    }
-    if (difficulty == "Hard" && question.difficulty == difficulty && world == question.world)
-    {
-        if (question.difficulty == "Middle" || question.difficulty == "Beginner" || question.difficulty == "Hard")
-        {
-            return true;
-        }
-    }
-    else if (difficulty == "Middle" && world == question.world)
-    {
-        if (question.difficulty == "Middle" || question.difficulty == "Beginner")
-        {
-            return true;
-        }
-    }
-    else if (difficulty == "Beginner" && world == question.world && question.difficulty == difficulty)
-    {
+    // Check if the world matches or if "All" is selected. If not, exclude the question.
+    if (world != question.world && world != "All")
+        return false;
+
+    // Include questions based on difficulty selection.
+    if (difficulty == "Hard" || (difficulty == "Middle" && (question.difficulty == "Middle" || question.difficulty == "Beginner")) || (difficulty == "Beginner" && question.difficulty == "Beginner"))
         return true;
-    }
-    return false;
+
+    return false; // Exclude the question if no conditions are met.
 }
 
 void finish(const int score)
@@ -143,6 +116,9 @@ void randomize(std::vector<Question> &questions)
 std::vector<Question> findQuestions(std::vector<Question> questions, const std::string &difficulty, const std::string &world)
 {   
     randomize(questions);
+    random_device rd;
+    mt19937 g(rd());
+    shuffle(questions.begin(), questions.end(), g);
     int questionCount = 0;
 
     cout << "Enter only number of the answer you choose >>" << endl;
@@ -150,43 +126,43 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
     cout << "Difficulty: " << difficulty << endl;
     cout << "World: " << world << endl;
 
-    std::vector<Question> result;
+    vector<Question> result;
     for (auto &q : questions)
     {
         if (filter(q, difficulty, world))
         {
             questionCount++;
-            if (questionCount > 5)
+            if (questionCount > 15)
             {
                 break;
             }
             result.push_back(q);
             printSeparator();
-            std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+            this_thread::sleep_for(chrono::milliseconds(3000));
             clearScreen();
             printSeparator();
-            std::cout << q.question << endl;
+            cout << q.question << endl;
             cout << endl;
             addAnswers(q, questions);
 
             for (int i = 0; i < q.answers.size(); i++)
             {
-                std::cout << i + 1 << ". " << q.answers[i] << std::endl;
+                cout << i + 1 << ". " << q.answers[i] << endl;
             }
-            std::cout << std::endl;
+            cout << endl;
 
             int userChoice;
-            std::cout << "Enter the number of your answer: ";
-            std::cin >> userChoice;
+            cout << "Enter the number of your answer: ";
+            cin >> userChoice;
 
             if (checkAnswer(q, userChoice))
             {
-                std::cout << GREEN_TEXT << "Correct! You earned 10 points." << RESET_COLOR << std::endl;
+                cout << GREEN_TEXT << "Correct! You earned 10 points." << RESET_COLOR << endl;
                 score += 10;
             }
             else
             {
-                std::cout << RED_TEXT << "Incorrect. The correct answer is: " << q.answer << RESET_COLOR << std::endl;
+                cout << RED_TEXT << "Incorrect. The correct answer is: " << q.answer << RESET_COLOR << endl;
             }
         }
     }
@@ -195,23 +171,23 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
     return result;
 }
 
-std::vector<Question> setupVector()
+vector<Question> setupVector()
 {
-    std::string csv = "libs/country_questions.csv";
+    string csv = "libs/country_questions.csv";
 
     rapidcsv::Document doc(csv);
 
     size_t numRows = doc.GetRowCount();
-    std::vector<Question> questions;
+    vector<Question> questions;
 
     for (size_t i = 0; i < numRows; ++i)
     {
         Question q;
-        q.question = doc.GetCell<std::string>("Question", i);
-        q.answer = doc.GetCell<std::string>("Answer", i);
-        q.category = doc.GetCell<std::string>("Category", i);
-        q.difficulty = doc.GetCell<std::string>("Difficulty", i);
-        q.world = doc.GetCell<std::string>("World", i);
+        q.question = doc.GetCell<string>("Question", i);
+        q.answer = doc.GetCell<string>("Answer", i);
+        q.category = doc.GetCell<string>("Category", i);
+        q.difficulty = doc.GetCell<string>("Difficulty", i);
+        q.world = doc.GetCell<string>("World", i);
 
         questions.push_back(q);
     }
