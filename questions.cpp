@@ -116,11 +116,7 @@ void randomize(std::vector<Question> &questions)
 std::vector<Question> findQuestions(std::vector<Question> questions, const std::string &difficulty, const std::string &world)
 {   
     randomize(questions);
-    random_device rd;
-    mt19937 g(rd());
-    shuffle(questions.begin(), questions.end(), g);
     int questionCount = 0;
-
     cout << "Enter only number of the answer you choose >>" << endl;
     cout << " " << endl;
     cout << "Difficulty: " << difficulty << endl;
@@ -141,8 +137,7 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
             this_thread::sleep_for(chrono::milliseconds(3000));
             clearScreen();
             printSeparator();
-            cout << q.question << endl;
-            cout << endl;
+            cout << q.question << "\n\n";
             addAnswers(q, questions);
 
             for (int i = 0; i < q.answers.size(); i++)
