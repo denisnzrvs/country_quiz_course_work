@@ -2,6 +2,6 @@
 
 int main()
 {
-    printMainMenu("");
+    printMainMenu();
     return 0;
 }

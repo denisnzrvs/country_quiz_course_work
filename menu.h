@@ -22,7 +22,7 @@ bool isValidWorldPart(const std::string &choice);
 void printDifficultyMenu();
 
 // Function to print main menu
-void printMainMenu(const std::string &message);
+void printMainMenu();
 
 // Function to print world menu and get user input
 void getWorldInput(std::string &worldPart, std::string &level);

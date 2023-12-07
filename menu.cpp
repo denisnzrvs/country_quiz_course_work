@@ -49,7 +49,7 @@ void printWorldMenu()
          << "Af. Africa\n"
          << "A. Asia\n"
          << "All.\n\n"
-         << MAGENTA_TEXT << "Enter your choice: " << RESET_COLOR << "\n\n";
+         << MAGENTA_TEXT << "Enter your choice: " << RESET_COLOR;
 }
 
 bool isValidWorldPart(const string &choice)
@@ -70,10 +70,10 @@ void printDifficultyMenu()
          << "B. Beginner\n"
          << "M. Middle\n"
          << "H. Hard\n\n"
-         << MAGENTA_TEXT << "Enter your choice: " << RESET_COLOR << "\n\n";
+         << MAGENTA_TEXT << "Enter your choice: " << RESET_COLOR;
 }
 
-void printMainMenu(const string &message)
+void printMainMenu()
 {
     char choice;
 
@@ -83,7 +83,7 @@ void printMainMenu(const string &message)
          << "P. Play\n"
          << "S. Score\n"
          << "Q. Quit\n\n"
-         << MAGENTA_TEXT << message << " Enter your choice: " << RESET_COLOR;
+         << MAGENTA_TEXT << " Enter your choice: " << RESET_COLOR;
 
     cin >> choice;
     choice = tolower(choice);
@@ -102,12 +102,13 @@ void printMainMenu(const string &message)
     }
     else
     {
-        printMainMenu("Invalid choice!");
+        printMainMenu();
     }
 }
 
 void getWorldInput(string &worldPart, string &difficulty)
 {
+    clearScreen();
     printWorldMenu();
     cin >> worldPart;
     boost::to_lower(worldPart);
@@ -142,7 +143,6 @@ string getDifficultyInput()
     printDifficultyMenu();
     cin >> difficulty;
     boost::to_lower(difficulty);
-    clearScreen();
     return difficulty;
 }
 
