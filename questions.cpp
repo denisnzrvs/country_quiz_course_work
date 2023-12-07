@@ -5,9 +5,11 @@
 #include <string>
 #include <random>
 #include <chrono>
-#include "writeScore.cpp"
 #include <thread>
+#include <fstream>
+#include <string>
 
+using namespace std;
 int score = 0;
 
 struct Question
@@ -55,17 +57,17 @@ void addAnswers(Question &question, const vector<Question> &allQuestions)
             otherAnswers.push_back(q.answer);
         }
     }
-    // randomises the vector of non-correct answers
+    // randomizes the vector of non-correct answers
     random_device rd;
     mt19937 g(rd());
     shuffle(otherAnswers.begin(), otherAnswers.end(), g);
 
-    // adds the first two answers from the randomised vector to the answers vector of the question.
+    // adds the first two answers from the randomized vector to the answers vector of the question.
     for (size_t i = 0; i < 2; ++i)
     {
         question.answers.push_back(otherAnswers[i]);
     }
-    // shuffles all the answers of the question iself.
+    // shuffles all the answers of the question itself.
     shuffle(question.answers.begin(), question.answers.end(), g);
 }
 
@@ -81,7 +83,7 @@ bool checkAnswer(const Question &question, int userChoice)
     return question.answer == question.answers[userChoice - 1];
 }
 
-bool filter(const Question &question, const std::string &difficulty, const std::string &world)
+bool filter(const Question &question, const string &difficulty, const string &world)
 {
     // Check if the world matches or if "All" is selected. If not, exclude the question.
     if (world != question.world && world != "All")
@@ -94,26 +96,46 @@ bool filter(const Question &question, const std::string &difficulty, const std::
     return false; // Exclude the question if no conditions are met.
 }
 
+// creates scores.txt file. If the file already exists, appends to it.
+void writeScore(string username, int score)
+{
+
+    ifstream infile("scores.txt");
+
+    if (!infile)
+    {
+        ofstream outfile("scores.txt");
+        outfile << username << " " << score << endl;
+    }
+    else
+    {
+        ofstream outfile("scores.txt", ios::app);
+        outfile << username << " " << score << endl;
+    }
+}
+
+//Congratulates player, saves the score
 void finish(const int score)
 {
-    std::cout << std::endl;
-    std::cout << "End of game! Your score is: " << score << std::endl;
-    std::cout << "Let's save your game. Enter your name: ";
-    std::string username;
-    std::cin >> username;
+    cout << endl;
+    cout << "End of game! Your score is: " << score << endl;
+    cout << "Let's save your game. Enter your name: ";
+    string username;
+    cin >> username;
     writeScore(username, score);
     cout << "Thanks for playing!";
     printWin();
 }
 
-void randomize(std::vector<Question> &questions)
+void randomize(vector<Question> &questions)
 {
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::shuffle(questions.begin(), questions.end(), g);
+    random_device rd;
+    mt19937 g(rd());
+    shuffle(questions.begin(), questions.end(), g);
 }
 
-void printQuestions(std::vector<Question> questions)
+//Outputs the previously filtered questions
+void printQuestions(vector<Question> questions)
 {
     for (int i = 0; i < questions.size(); i++)
     {
@@ -148,7 +170,8 @@ void printQuestions(std::vector<Question> questions)
     finish(score);
 }
 
-void findQuestions(std::vector<Question> questions, const std::string &difficulty, const std::string &world)
+//Filters questions for printQuestions()
+void findQuestions(vector<Question> questions, const string &difficulty, const string &world)
 {
     randomize(questions);
     int questionCount = 0;
@@ -173,6 +196,7 @@ void findQuestions(std::vector<Question> questions, const std::string &difficult
     printQuestions(result);
 }
 
+//parses the libs/country_questions.csv file and creates a vector of Question objects
 vector<Question> setupVector()
 {
     string csv = "libs/country_questions.csv";

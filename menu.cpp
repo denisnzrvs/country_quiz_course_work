@@ -4,12 +4,54 @@
 #include "menu.h"
 #include "questions.cpp"
 #include <vector>
-#include "printScores.cpp"
 #include <algorithm>
 #include <map>
+#include <iostream>
+#include <fstream>
 #include <boost/algorithm/string.hpp>
 
 using namespace std;
+
+// Function to compare scores for sorting
+bool compareScores(const string &a, const string &b)
+{
+    // Assuming scores are integers, use stoi to convert and compare
+    return stoi(a.substr(a.find_last_of(' ') + 1)) > stoi(b.substr(b.find_last_of(' ') + 1));
+}
+
+// Prints the scores from file scores.txt sorted descending.
+void printScores()
+{
+    string filename = "scores.txt";
+    vector<string> scores;
+
+    // Open the specified file for reading
+    ifstream infile(filename);
+
+    if (!infile)
+    {
+        cerr << "Error: Unable to open the file '" << filename << "'." << endl;
+        return;
+    }
+
+    // Read lines from the file
+    string line;
+    while (getline(infile, line))
+    {
+        scores.push_back(line);
+    }
+
+    // Sort scores in descending order
+    sort(scores.begin(), scores.end(), compareScores);
+
+    // Display sorted scores
+    cout << "Sorted Scores:\n"
+         << endl;
+    for (const auto &score : scores)
+    {
+        cout << score << endl;
+    }
+}
 
 // sets difficulty as string to filter questions in findQuestions() (questions.cpp). Runs after user has selected a difficulty.
 void setDifficulty(string &difficulty)
@@ -57,11 +99,11 @@ bool isValidWorldPart(const string &choice)
     const vector<string> validChoices = {"eu", "e", "am", "af", "a", "all"};
     string lowerChoice = choice;
     boost::to_lower(lowerChoice);
-    return std::any_of(validChoices.begin(), validChoices.end(),
-                       [&](const std::string &validChoice)
-                       {
-                           return boost::iequals(validChoice, lowerChoice);
-                       });
+    return any_of(validChoices.begin(), validChoices.end(),
+                  [&](const string &validChoice)
+                  {
+                      return boost::iequals(validChoice, lowerChoice);
+                  });
 }
 
 void printDifficultyMenu()
@@ -94,10 +136,12 @@ void printMainMenu()
     }
     else if (choice == 's')
     {
+        clearScreen();
         printScores();
     }
     else if (choice == 'q')
     {
+        clearScreen();
         exit(0);
     }
     else

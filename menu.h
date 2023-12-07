@@ -2,38 +2,18 @@
 #define MENU_H
 
 #include <string>
+using namespace std;
 
-// Function to set difficulty
-void setDifficulty(std::string &level);
-
-// Function to set world
-void setWorld(std::string &worldPart);
-
-// Function to clear the screen
+void setDifficulty(string &level);
+void setWorld(string &worldPart);
 void clearScreen();
-
-// Function to print world menu
 void printWorldMenu();
-
-// Function to validate world part input
-bool isValidWorldPart(const std::string &choice);
-
-// Function to print difficulty menu
+bool isValidWorldPart(const string &choice);
 void printDifficultyMenu();
-
-// Function to print main menu
 void printMainMenu();
-
-// Function to print world menu and get user input
-void getWorldInput(std::string &worldPart, std::string &level);
-
-// Function to validate difficulty input
-bool isValidDifficulty(const std::string &choice);
-
-// Function to get difficulty input from the user
-std::string getDifficultyInput();
-
-// Function to handle difficulty menu and world menu
+void getWorldInput(string &worldPart, string &level);
+bool isValidDifficulty(const string &choice);
+string getDifficultyInput();
 void playMenu();
-
+void printScores();
 #endif // MENU_H
