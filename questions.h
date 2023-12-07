@@ -22,4 +22,5 @@ bool allAdd(const std::vector<Question> &allQuestions, const std::vector<Questio
 bool filterQuestion(const Question &question, const std::string &worldPart, const std::string &difficulty);
 void findQuestions(const std::vector<Question> &allQuestions, std::vector<Question> &addedQuestions, const std::string &worldPart, const std::string &difficulty);
 std::vector<Question> setupVector();
+void printQuestion(const Question &question);
 #endif // QUESTIONS_H

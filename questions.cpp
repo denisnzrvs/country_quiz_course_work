@@ -95,7 +95,7 @@ bool filter(const Question &question, const std::string &difficulty, const std::
 }
 
 void finish(const int score)
-    {
+{
     std::cout << std::endl;
     std::cout << "End of game! Your score is: " << score << std::endl;
     std::cout << "Let's save your game. Enter your name: ";
@@ -113,12 +113,47 @@ void randomize(std::vector<Question> &questions)
     std::shuffle(questions.begin(), questions.end(), g);
 }
 
-std::vector<Question> findQuestions(std::vector<Question> questions, const std::string &difficulty, const std::string &world)
-{   
+void printQuestions(std::vector<Question> questions)
+{
+    for (int i = 0; i < questions.size(); i++)
+    {
+        Question q = questions[i];
+        printSeparator();
+        this_thread::sleep_for(chrono::milliseconds(3000));
+        clearScreen();
+        printSeparator();
+        cout << q.question << "\n\n";
+        addAnswers(q, questions);
+
+        for (int i = 0; i < q.answers.size(); i++)
+        {
+            cout << i + 1 << ". " << q.answers[i] << endl;
+        }
+        cout << endl;
+
+        int userChoice;
+        cout << "Enter the number of your answer: ";
+        cin >> userChoice;
+
+        if (checkAnswer(q, userChoice))
+        {
+            cout << GREEN_TEXT << "Correct! You earned 10 points." << RESET_COLOR << endl;
+            score += 10;
+        }
+        else
+        {
+            cout << RED_TEXT << "Incorrect. The correct answer is: " << q.answer << RESET_COLOR << endl;
+        }
+    }
+    finish(score);
+}
+
+void findQuestions(std::vector<Question> questions, const std::string &difficulty, const std::string &world)
+{
     randomize(questions);
     int questionCount = 0;
-    cout << "Enter only number of the answer you choose >>" << endl;
-    cout << " " << endl;
+    cout << "Enter only the number of the answer you choose\n"
+         << endl;
     cout << "Difficulty: " << difficulty << endl;
     cout << "World: " << world << endl;
 
@@ -127,43 +162,15 @@ std::vector<Question> findQuestions(std::vector<Question> questions, const std::
     {
         if (filter(q, difficulty, world))
         {
+            result.push_back(q);
             questionCount++;
-            if (questionCount > 15)
+            if (questionCount == 5)
             {
                 break;
             }
-            result.push_back(q);
-            printSeparator();
-            this_thread::sleep_for(chrono::milliseconds(3000));
-            clearScreen();
-            printSeparator();
-            cout << q.question << "\n\n";
-            addAnswers(q, questions);
-
-            for (int i = 0; i < q.answers.size(); i++)
-            {
-                cout << i + 1 << ". " << q.answers[i] << endl;
-            }
-            cout << endl;
-
-            int userChoice;
-            cout << "Enter the number of your answer: ";
-            cin >> userChoice;
-
-            if (checkAnswer(q, userChoice))
-            {
-                cout << GREEN_TEXT << "Correct! You earned 10 points." << RESET_COLOR << endl;
-                score += 10;
-            }
-            else
-            {
-                cout << RED_TEXT << "Incorrect. The correct answer is: " << q.answer << RESET_COLOR << endl;
-            }
         }
     }
-
-    finish(score);
-    return result;
+    printQuestions(result);
 }
 
 vector<Question> setupVector()
