@@ -58,7 +58,8 @@ bool isValidWorldPart(const string &choice)
     string lowerChoice = choice;
     boost::to_lower(lowerChoice);
     return std::any_of(validChoices.begin(), validChoices.end(),
-                       [&](const std::string& validChoice) {
+                       [&](const std::string &validChoice)
+                       {
                            return boost::iequals(validChoice, lowerChoice);
                        });
 }
@@ -86,7 +87,7 @@ void printMainMenu(const string &message)
 
     cin >> choice;
     choice = tolower(choice);
-    
+
     if (choice == 'p')
     {
         playMenu();
@@ -141,6 +142,7 @@ string getDifficultyInput()
     printDifficultyMenu();
     cin >> difficulty;
     boost::to_lower(difficulty);
+    clearScreen();
     return difficulty;
 }
 
