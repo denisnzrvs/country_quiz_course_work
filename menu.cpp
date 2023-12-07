@@ -7,7 +7,8 @@
 #include "printScores.cpp"
 
 using namespace std;
-// Function to set difficulty
+
+// sets difficulty as string to filter questions in findQuestions() (questions.cpp). Runs after user has selected a difficulty.
 void setDifficulty(string &level)
 {
     if (level == "B" || level == "b")
@@ -24,7 +25,7 @@ void setDifficulty(string &level)
     }
 }
 
-// Function to set world
+// Function to set the part of the world as a string to filter in findQuestions() (questions.cpp). Runs after user has selected a part of the world.
 void setWorld(string &worldPart)
 {
     if (worldPart == "Eu" || worldPart == "eu")
@@ -59,7 +60,6 @@ void clearScreen()
     cout << "\033[2J\033[1;1H"; // ANSI escape code for clearing screen
 }
 
-// Function to print world menu
 void printWorldMenu()
 {
     cout << MAGENTA_TEXT << "Choose part of the World" << RESET_COLOR << "\n"
@@ -139,7 +139,7 @@ void getWorldInput(string &worldPart, string &level)
     }
     else
     {
-        printWorldMenu();
+        getWorldInput(worldPart, level);
     }
 }
 
