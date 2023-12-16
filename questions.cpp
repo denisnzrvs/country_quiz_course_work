@@ -8,6 +8,8 @@
 #include <thread>
 #include <fstream>
 #include <string>
+#include <boost/tokenizer.hpp>
+#include <boost/algorithm/string.hpp>
 
 using namespace std;
 int score = 0;
@@ -114,7 +116,7 @@ void writeScore(string username, int score)
     }
 }
 
-//Congratulates player, saves the score
+// Congratulates player, saves the score
 void finish(const int score)
 {
     cout << endl;
@@ -134,7 +136,7 @@ void randomize(vector<Question> &questions)
     shuffle(questions.begin(), questions.end(), g);
 }
 
-//Outputs the previously filtered questions
+// Outputs the previously filtered questions
 void printQuestions(vector<Question> questions)
 {
     for (int i = 0; i < questions.size(); i++)
@@ -170,7 +172,7 @@ void printQuestions(vector<Question> questions)
     finish(score);
 }
 
-//Filters questions for printQuestions()
+// Filters questions for printQuestions()
 void findQuestions(vector<Question> questions, const string &difficulty, const string &world)
 {
     randomize(questions);
@@ -196,27 +198,43 @@ void findQuestions(vector<Question> questions, const string &difficulty, const s
     printQuestions(result);
 }
 
-//parses the libs/country_questions.csv file and creates a vector of Question objects
+// parses the libs/country_questions.csv file and creates a vector of Question objects
 vector<Question> setupVector()
 {
     string csv = "libs/country_questions.csv";
+    ifstream file(csv);
 
-    rapidcsv::Document doc(csv);
-
-    size_t numRows = doc.GetRowCount();
-    vector<Question> questions;
-
-    for (size_t i = 0; i < numRows; ++i)
+    if (!file.is_open())
     {
-        Question q;
-        q.question = doc.GetCell<string>("Question", i);
-        q.answer = doc.GetCell<string>("Answer", i);
-        q.category = doc.GetCell<string>("Category", i);
-        q.difficulty = doc.GetCell<string>("Difficulty", i);
-        q.world = doc.GetCell<string>("World", i);
+        cerr << "Failed to open the questions file";
+        return {};
+    }
 
+    // Skip the first line
+    string header;
+    getline(file, header);
+
+    vector<Question> questions;
+    string line;
+
+    while (getline(file, line))
+    {
+        boost::tokenizer<boost::escaped_list_separator<char>, string::const_iterator, string> tok(line, boost::escaped_list_separator<char>("\\", ",", ""));
+        Question q;
+
+        auto it = tok.begin();
+        if (it != tok.end())
+        {
+            q.question = *it++;
+            q.answer = *it++;
+            q.category = *it++;
+            q.difficulty = *it++;
+            q.world = *it;
+            boost::trim_right(q.world); // Remove newline character
+        }
         questions.push_back(q);
     }
 
+    file.close();
     return questions;
 }
